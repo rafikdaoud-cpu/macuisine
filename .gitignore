@@ -1,0 +1,55 @@
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+/playwright-report
+/test-results
+/benchmark-results
+firebase-debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code (personal)
+.claude/
+.vscode/
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Données privées et environnements locaux
+.macuisine_catalog/
+.validation-tools/
+validation-tools/
+*.key
+smtp.json
+branding.json
+# Scripts de migration propres au poste de développement
+/tooling/*
+!/tooling/render-lab-site/
+!/tooling/render-fixtures.mjs
+!/tooling/catalog-manifest.mjs
+!/tooling/catalog-assets.mjs
+!/tooling/check-local-glb-images.mjs
+!/tooling/check-local-glb-model.mjs
+!/tooling/local-model-fixture.mjs
+!/tooling/render-lab-asset.ts
+!/tooling/safari-timeline.mjs
+# Ancienne configuration de déploiement OpenPlan3D
+/.firebaserc
+/apphosting.yaml
+/firebase.json
+/storage.rules

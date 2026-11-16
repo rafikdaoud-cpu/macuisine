@@ -1,0 +1,19 @@
+MaCuisine — OpenPlan3D personnalisé
+====================================
+
+Cette version ouvre un parcours en 3 étapes : pièce et dimensions, implantation, puis style. À la validation, elle crée un projet OpenPlan3D avec les murs et un premier ensemble de meubles de cuisine. Dans le catalogue de l’éditeur, seuls les meubles et modèles de pièce « Kitchen » restent proposés.
+
+Compilation du site statique (sur votre PC Windows)
+---------------------------------------------------
+1. Installez Node.js 22 LTS. La dépendance de génération statique est épinglée sur la série compatible avec SvelteKit 2.
+2. Extrayez cette archive dans un dossier de travail.
+3. Ouvrez PowerShell dans le dossier contenant package.json.
+4. Exécutez :
+   npm install
+   npm run build
+5. Le site compilé se trouve dans le dossier build/.
+6. Dans cPanel, repérez la racine documentaire exacte de macuisine.csmtaksit.dz. Téléchargez d’abord une copie de sauvegarde de son contenu, puis remplacez les anciens fichiers par le contenu de build/ (pas le dossier build lui-même).
+
+La compilation nécessite une connexion Internet pour télécharger les dépendances. Cette archive contient le code source modifié, pas un site déjà compilé. La taille finale de build/ dépend des ressources incluses et n’a pas été mesurée ici.
+
+Le site utilise le stockage local du navigateur pour les projets enregistrés : chaque utilisateur retrouve ses propres projets sur son appareil/navigateur. Cette version ne met pas en place de comptes utilisateurs ni de stockage partagé entre utilisateurs.

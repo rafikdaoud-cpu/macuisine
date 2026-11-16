@@ -1,0 +1,38 @@
+name: Web checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+        env:
+          NODE_ENV: production
+          NPM_CONFIG_INCLUDE: dev
+      - name: Targeted configurator regressions
+        run: npx vitest run tests/project-dossier.test.ts tests/creation-locales.test.ts tests/presentation-materials.test.ts tests/creation-workflow.test.ts tests/storage-appearance.test.ts tests/equipped-kitchen.test.ts tests/independent-island.test.ts tests/frame-scene.test.ts tests/scene-framing.test.ts tests/add-configurator-modules.test.ts
+      - name: PHP syntax
+        run: find static/api -name '*.php' -print0 | xargs -0 -n1 php -l
+      - run: npm run build
+      - name: Site compiled for PHP hosting
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: csm-creation-site
+          path: build/
+          if-no-files-found: error
+          retention-days: 7
