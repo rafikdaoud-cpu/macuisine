@@ -84,9 +84,9 @@
 <div class="creation-screen">
   <main class="creation-card">
     <header>
-      <a class="creation-brand" href={$branding.logoLink}><span class="logo-window" class:custom={$branding.logoUrl !== "/branding/csm-taksit-logo.png"}><img src={$branding.logoUrl} alt={$branding.companyName} /></span><span>{$branding.companyName} · Création<small>{$ui("CUISINES · DRESSINGS · MEUBLES")}</small></span></a>
+      <a class="creation-brand" href={$branding.logoLink || "/"}><span class="logo-window custom"><img src={$branding.logoUrl} alt={$branding.companyName} /></span><span>{$branding.companyName} · Création<small>{$ui("CUISINES · DRESSINGS · MEUBLES")}</small></span></a>
       <div class="welcome-language"><LanguageSwitcher /></div>
-      <a href={$branding.shopLink} class="shop-link">{$ui("← Retour à la boutique")}</a>
+      {#if $branding.shopLink}<a href={$branding.shopLink} class="shop-link">{$ui("← Retour à la boutique")}</a>{/if}
       <p class="eyebrow">{$branding.companyName} · {$ui("Création sur mesure")}</p>
       <h1>{$ui(step === 0 ? 'Votre espace, vos idées.' : creationLabels[kind])}</h1>
       <p class="intro">{$ui(step === 0 ? 'Imaginez votre cuisine, votre dressing ou votre meuble. Donnez forme à votre projet et partagez-le avec notre équipe.' : 'Préparez votre projet, puis ajustez-le dans le planificateur 2D et 3D.')}</p>
@@ -151,7 +151,7 @@
       <CreationPreview project={preview?.project??null} {kind} required={preview?.required??null} onFit={()=>{const required=preview?.required;if(required){width=Math.max(width,required.widthMm);depth=Math.max(depth,required.depthMm);ceiling=Math.max(ceiling,required.heightMm);}}} />
       </div>
     {/if}
-    <p class="disclaimer">{$ui("Dessin indicatif. Les dimensions, la faisabilité et le devis sont confirmés avec CSM Taksit avant fabrication.").replace("CSM Taksit", $branding.companyName)}</p>
+    <p class="disclaimer">{$ui("Dessin indicatif. Les dimensions, la faisabilité et le devis sont confirmés avec {entreprise} avant fabrication.").replace("{entreprise}", $branding.companyName)}</p>
   </main>
 </div>
 
@@ -164,14 +164,14 @@
   .welcome-language{display:flex;justify-content:flex-end;margin:12px 0 20px}
   .creation-screen{position:relative;z-index:10;min-height:100vh;background:#f4f5f9;padding:32px 20px;color:#1e2447;font-family:inherit}
   .creation-card{max-width:1050px;margin:auto;background:#ffffff;border:1px solid #dce0eb;border-radius:24px;padding:36px}
-  .creation-brand{display:flex;align-items:center;gap:16px;margin-bottom:22px;background:#1e2447;color:white;border-radius:12px;padding:8px 16px;font-size:24px}.creation-brand small{display:block;font-size:9px;letter-spacing:.15em;margin-top:5px;color:#c5cce0}.logo-window{display:block;width:92px;height:72px;overflow:hidden;flex-shrink:0}.logo-window img{height:72px;width:auto;max-width:none}header{max-width:none}.shop-link{font-size:14px;text-decoration:underline;color:#566587}.eyebrow{font-size:12px;letter-spacing:.16em;font-weight:700;margin:36px 0 12px;color:#56627b}
+  .creation-brand{display:flex;align-items:center;gap:16px;margin-bottom:22px;background:var(--brand-primary,#1e2447);color:white;border-radius:12px;padding:8px 16px;font-size:24px}.creation-brand small{display:block;font-size:9px;letter-spacing:.15em;margin-top:5px;color:#c5cce0}.logo-window{display:block;width:92px;height:72px;overflow:hidden;flex-shrink:0}.logo-window img{height:72px;width:auto;max-width:none}header{max-width:none}.shop-link{font-size:14px;text-decoration:underline;color:#566587}.eyebrow{font-size:12px;letter-spacing:.16em;font-weight:700;margin:36px 0 12px;color:#56627b}
   h1{font-size:clamp(30px,5vw,48px);line-height:1.12;font-weight:700;margin:0 0 18px}h2{font-size:23px;font-weight:650;margin:28px 0 20px}.intro{font-size:17px;line-height:1.7;color:#56627b}
   .kind-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:32px 0}.kind-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;border:1px solid #dce0eb;border-radius:16px;padding:26px;gap:15px;background:#f3f5fa;transition:background .15s}.kind-card:hover{background:#e7ebf5}.kind-card svg{width:72px;height:72px;color:#1e2447}.kind-card strong{font-size:21px}.kind-card span{color:#56627b;line-height:1.55;font-size:14px}.kind-card .start{color:#1e2447;font-weight:700;margin-top:auto;padding-top:12px}
   .notice,.help,.disclaimer{font-size:13px;color:#56627b;line-height:1.65}.notice{margin-bottom:20px}.disclaimer{margin-top:32px;padding-top:20px;border-top:1px solid #dce0eb}
-  nav ol{display:flex;gap:10px;list-style:none;padding:0;margin:26px 0;flex-wrap:wrap}nav li{padding:10px 16px;background:#e9ecf5;border-radius:8px;font-size:14px}nav li[aria-current]{background:#1e2447;color:white}
+  nav ol{display:flex;gap:10px;list-style:none;padding:0;margin:26px 0;flex-wrap:wrap}nav li{padding:10px 16px;background:#e9ecf5;border-radius:8px;font-size:14px}nav li[aria-current]{background:var(--brand-primary,#1e2447);color:white}
   .choices{display:flex;flex-wrap:wrap;gap:12px}.choices button{padding:16px 20px;border:1px solid #d2d8e8;border-radius:12px;background:white;text-align:left}.chosen{outline:2px solid #5266ac;outline-offset:2px;background:#eef1f8!important}
   .fields,.column-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:24px 0}label{display:block;font-size:14px;font-weight:600}input:not([type=checkbox]),select{display:block;width:100%;padding:11px 12px;margin-top:8px;border:1px solid #bdc7df;border-radius:8px;background:#fff;color:#1e2447}fieldset{min-width:0;border:1px solid #d2d8e8;padding:16px;border-radius:12px}legend{font-weight:700;padding:0 5px}fieldset label{margin-bottom:15px}.check{display:flex;align-items:flex-start;gap:8px;font-weight:400}.check input{margin-top:4px}.project-name{max-width:520px;margin-top:26px}
   .preset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:20px 0}.preset-grid button{border:1px solid #d4dbea;border-radius:10px;padding:16px;background:#fff;text-align:left}.preset-grid strong{display:block;font-size:14px}.preset-grid span{display:block;font-size:12px;color:#56627b;line-height:1.5;margin-top:6px}
-  footer{display:flex;justify-content:space-between;gap:12px;margin-top:32px}.primary,.secondary{padding:12px 18px;border-radius:9px;font-weight:650}.primary{background:#1e2447;color:#fff}.secondary{border:1px solid #cbd2e3;color:#1e2447;background:transparent}.error{padding:14px;background:#fff0ec;color:#9b3226;border-radius:8px;margin-top:20px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}:global(.creation-screen :focus-visible){outline:3px solid #b16e26;outline-offset:4px}
+  footer{display:flex;justify-content:space-between;gap:12px;margin-top:32px}.primary,.secondary{padding:12px 18px;border-radius:9px;font-weight:650}.primary{background:var(--brand-primary,#1e2447);color:#fff}.secondary{border:1px solid #cbd2e3;color:#1e2447;background:transparent}.error{padding:14px;background:#fff0ec;color:#9b3226;border-radius:8px;margin-top:20px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}:global(.creation-screen :focus-visible){outline:3px solid #b16e26;outline-offset:4px}
   @media(max-width:760px){.creation-card{padding:24px 18px}.kind-grid{grid-template-columns:1fr}.kind-card{padding:20px}.kind-card svg{width:48px;height:48px}.fields,.column-grid{grid-template-columns:1fr}.creation-screen{padding:14px 10px}.eyebrow{margin-top:24px}footer{flex-wrap:wrap}.primary,.secondary{min-height:44px}}
 </style>

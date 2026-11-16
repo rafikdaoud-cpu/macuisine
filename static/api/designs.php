@@ -89,7 +89,7 @@ foreach ($names as $key => $_) {
 if ($total > 45 * 1024 * 1024) reply(413, ['error' => 'Le dossier complet dépasse la limite de 45 Mio.']);
 if (isset($names['png']) && file_get_contents($_FILES['png']['tmp_name'], false, null, 0, 8) !== "\x89PNG\r\n\x1a\n") reply(400, ['error'=>'Aperçu PNG invalide.']);
 if (file_get_contents($_FILES['pdf']['tmp_name'], false, null, 0, 5) !== '%PDF-') reply(400, ['error'=>'PDF invalide.']);
-try { if (!csm_submission_limit($email)) reply(429, ['error'=>'Trop de demandes. Réessayez plus tard ou contactez CSM Taksit.']); }
+try { if (!csm_submission_limit($email)) reply(429, ['error'=>'Trop de demandes. Réessayez plus tard ou contactez notre équipe.']); }
 catch (Throwable $error) { reply(500, ['error'=>'Enregistrement temporairement indisponible.']); }
 if (!is_dir($requestDir) && !mkdir($requestDir, 0700, true) && !is_dir($requestDir)) reply(500, ['error' => 'Impossible de créer le stockage privé.']);
 @chmod($requestDir, 0700);

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/mail-service.php';
 function csm_branding(): array {
-    $defaults = ['companyName'=>'CSM Taksit','logoUrl'=>'/branding/csm-taksit-logo.png','logoLink'=>'https://csmtaksit.dz','shopLink'=>'https://eshop.csmtaksit.dz/'];
+    $defaults = ['companyName'=>'Mon entreprise','logoUrl'=>'/branding/platform-logo.svg','logoLink'=>'','shopLink'=>'','phone'=>'','contactEmail'=>'','website'=>'','primaryColor'=>'#1e2447'];
     $file=csm_private_base().'/branding.json';
     if (!is_file($file)) return $defaults;
     $stored=json_decode((string)file_get_contents($file),true,16,JSON_THROW_ON_ERROR);

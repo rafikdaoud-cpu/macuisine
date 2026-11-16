@@ -269,6 +269,7 @@
   {#if mode === '2d'}
     <button
       class="max-md:hidden fixed bottom-4 left-14 w-8 h-8 rounded-full shadow-lg hover:bg-slate-600 transition-colors z-50 text-sm"
+      style:position="absolute"
       class:bg-blue-600={showLayers}
       class:text-white={showLayers}
       class:bg-slate-700={!showLayers}
@@ -283,6 +284,7 @@
   <!-- Undo History toggle button -->
   <button
     class="max-md:hidden fixed bottom-4 left-24 w-8 h-8 rounded-full shadow-lg hover:bg-slate-600 transition-colors z-50 text-sm"
+    style:position="absolute"
     class:bg-blue-600={showUndoHistory}
     class:text-white={showUndoHistory}
     class:bg-slate-700={!showUndoHistory}
@@ -298,6 +300,7 @@
   <!-- Help button (desktop only — keyboard shortcuts are meaningless on touch) -->
   <button
     class="max-md:hidden fixed bottom-4 left-4 w-8 h-8 rounded-full bg-slate-700 text-white text-sm font-bold shadow-lg hover:bg-slate-600 transition-colors z-50"
+    style:position="absolute"
     onclick={() => showHelp = !showHelp}
     title={`${$t('shortcuts.title')} (?)`}
     aria-label={$t('shortcuts.title')}

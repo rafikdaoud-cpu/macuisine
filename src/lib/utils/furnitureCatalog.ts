@@ -44,7 +44,7 @@ export const furnitureCatalog: FurnitureDef[] = [
       (type === 'drawers' ? [false] : [false, true]).map(doors => ({
         id: `csm_${type}_${count}_${doors ? 'doors' : 'open'}`,
         name: `${type === 'hanging' ? 'Penderie' : type === 'shelves' ? `${count} étagère(s)` : `${count} tiroir(s)`}${doors ? ' avec portes' : ''}`,
-        category: 'CSM Storage', reference: `CSM-${type}-${count}-${doors ? 'P' : 'O'}`,
+        category: 'Custom Storage', reference: `MOD-${type}-${count}-${doors ? 'P' : 'O'}`,
         icon: '▥', color: '#c6a16e', width: 60, depth: 60, height: 220,
       })))),
   // Living Room

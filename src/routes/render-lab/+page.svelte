@@ -43,7 +43,7 @@
   });
 </script>
 
-<svelte:head><title>CSM Création</title><meta name="robots" content="noindex" /></svelte:head>
+<svelte:head><title>Simulateur Création</title><meta name="robots" content="noindex" /></svelte:head>
 <div class="lab">
   <header>
     <a href="/" class="brand"><span class="mark">◈</span> OpenPlan3D <span class="divider">/</span> <span class="light">Render lab</span></a>

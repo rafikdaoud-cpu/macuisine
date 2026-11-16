@@ -23,8 +23,8 @@
 
   async function submit(event: SubmitEvent) {
     event.preventDefault(); error = '';
-    const fr = 'Voulez-vous envoyer votre projet à l’équipe CSM Taksit afin qu’elle vous contacte et valide la conception avec vous ?\n\nLe dossier transmis comprendra un PDF, un plan CAO au format DXF (ouvrable dans AutoCAD), la liste des équipements et une copie modifiable du projet.';
-    if (!window.confirm($ui(fr).replaceAll("CSM Taksit", $branding.companyName))) return;
+    const fr = 'Voulez-vous envoyer votre projet à l’équipe {entreprise} afin qu’elle vous contacte et valide la conception avec vous ?\n\nLe dossier transmis comprendra un PDF, un plan CAO au format DXF (ouvrable dans AutoCAD), la liste des équipements et une copie modifiable du projet.';
+    if (!window.confirm($ui(fr).replaceAll("{entreprise}", $branding.companyName))) return;
     busy = true; const oldMode = get(viewMode),oldFront=get(furnitureFrontView);
     try {
       const language = get(localeStore);
@@ -71,7 +71,7 @@
   <dialog use:modalDialog oncancel={(event) => { event.preventDefault(); if (!busy) onClose(); }} onclose={(event) => reconcileNativeClose(event, busy, onClose)} aria-labelledby="design-submit-title" class="m-auto max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-white p-6 text-slate-800 shadow-2xl backdrop:bg-slate-950/50">
     {#if sent}
       <h2 id="design-submit-title" class="text-xl font-bold">{$ui("Votre dossier est enregistré")}</h2>
-      <p class="mt-3 text-sm">{$ui("Votre demande a été transmise à l’espace privé de l’administration CSM Taksit. L’équipe pourra télécharger les fichiers et vous contacter.").replaceAll("CSM Taksit", $branding.companyName)}</p>
+      <p class="mt-3 text-sm">{$ui("Votre demande a été transmise à l’espace privé de l’administration {entreprise}. L’équipe pourra télécharger les fichiers et vous contacter.").replaceAll("{entreprise}", $branding.companyName)}</p>
 
       <p class="mt-3 text-sm" role="status">{$ui(mailStatus==='sent'?'Votre e-mail de remerciement a été accepté par le serveur SMTP, avec le lien du projet et les pièces jointes.':'Votre dossier est enregistré. Le mail de confirmation n’a pas pu être envoyé pour le moment ; notre équipe peut le renvoyer.')}</p>
       <button class="mt-5 rounded-lg bg-teal-700 px-5 py-2.5 font-semibold text-white" onclick={onClose}>{$ui("Fermer")}</button>
@@ -83,7 +83,7 @@
       <form class="mt-4 space-y-4" onsubmit={submit}>
         <fieldset><legend class="mb-2 text-sm font-semibold">{$ui("Format de l’aperçu")}</legend><div class="grid grid-cols-2 gap-2">{#each [{id:'png2d',label:'Plan 2D PNG'},{id:'png3d',label:'Vue 3D PNG'},{id:'pdf',label:'Document PDF'},{id:'dwg',label:'DWG (fichier DXF)'}] as item}<label class="flex cursor-pointer items-center gap-2 rounded-lg border p-3 text-sm {preferredFormat===item.id?'border-teal-700 bg-teal-50':''}"><input type="radio" name="format" value={item.id} bind:group={preferredFormat} />{$ui(item.label)}</label>{/each}</div></fieldset>
         <div class="grid gap-3 sm:grid-cols-2"><label class="text-sm">{$ui("Nom")}<input required maxlength="100" bind:value={lastName} class="mt-1 block w-full rounded border border-slate-300 px-3 py-2" /></label><label class="text-sm">{$ui("Prénom")}<input required maxlength="100" bind:value={firstName} class="mt-1 block w-full rounded border border-slate-300 px-3 py-2" /></label><label class="text-sm">{$ui("E-mail")}<input required type="email" maxlength="254" bind:value={email} class="mt-1 block w-full rounded border border-slate-300 px-3 py-2" /></label><label class="text-sm">{$ui("Téléphone")}<input required type="tel" maxlength="25" bind:value={phone} class="mt-1 block w-full rounded border border-slate-300 px-3 py-2" /></label></div>
-        <label class="flex items-start gap-2 text-xs text-slate-600"><input required type="checkbox" class="mt-0.5" /><span>{$ui("J’accepte l’enregistrement et la transmission de mes coordonnées et de mon projet à l’équipe CSM Taksit pour être recontacté et valider la conception.").replaceAll("CSM Taksit", $branding.companyName)}</span></label>
+        <label class="flex items-start gap-2 text-xs text-slate-600"><input required type="checkbox" class="mt-0.5" /><span>{$ui("J’accepte l’enregistrement et la transmission de mes coordonnées et de mon projet à l’équipe {entreprise} pour être recontacté et valider la conception.").replaceAll("{entreprise}", $branding.companyName)}</span></label>
         {#if error}<p role="alert" class="text-sm text-red-700">{error}</p>{/if}
         <div class="flex justify-end gap-2"><button type="button" class="rounded-lg border px-4 py-2" onclick={onClose} disabled={busy}>{$ui("Annuler")}</button><button type="submit" class="rounded-lg bg-teal-700 px-4 py-2 font-semibold text-white disabled:opacity-50" disabled={busy}>{$ui(busy?'Préparation et envoi…':'Confirmer et envoyer')}</button></div>
       </form>

@@ -42,7 +42,7 @@
     const overrides = $customFurnitureCatalog;
     const base = furnitureCatalog.map(item => overrides.find(custom => custom.id === item.id || (custom.reference && custom.reference.toLocaleLowerCase() === item.reference?.toLocaleLowerCase())) ?? item);
     const additions = overrides.filter(custom => !furnitureCatalog.some(item => item.id === custom.id || (item.reference && item.reference.toLocaleLowerCase() === custom.reference?.toLocaleLowerCase())));
-    return [...base, ...additions].filter(item => item.category === 'Kitchen' || item.category === 'CSM Storage');
+    return [...base, ...additions].filter(item => item.category === 'Kitchen' || item.category === 'Custom Storage');
   })());
   let kitchenWalls = $derived($activeFloor?.walls ?? []);
   let selectedKitchenGroup = $state<'all' | 'storage' | 'base' | 'wall' | 'tall' | 'appliance' | 'island' | 'filler'>('all');
@@ -150,7 +150,7 @@
       const s = normalizeCatalogSearch(search);
       let items = selectedCategory === 'Favorites'
         ? favoriteItems
-        : kitchenCatalog.filter(f => selectedKitchenGroup === 'all' || (selectedKitchenGroup === 'storage' ? f.category === 'CSM Storage' : f.catalogGroup === selectedKitchenGroup));
+        : kitchenCatalog.filter(f => selectedKitchenGroup === 'all' || (selectedKitchenGroup === 'storage' ? f.category === 'Custom Storage' : f.catalogGroup === selectedKitchenGroup));
       if (s) {
         items = items.filter(f => [f.name, furnitureName(f.id, $locale), f.reference ?? '', f.productType ?? '', f.category, catalogCategoryLabels[f.category] ? $t(catalogCategoryLabels[f.category]) : f.category]
           .some(value => normalizeCatalogSearch(value).includes(s)));

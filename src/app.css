@@ -155,8 +155,8 @@ dialog.modal-overlay::backdrop { background: transparent; }
   }
 }
 
-/* CSM Taksit brand palette; product material colours remain independent. */
-@theme { --color-teal-700:#1e2447; --color-teal-600:#30395f; --color-teal-800:#161b36; --color-blue-500:#304580; --color-blue-600:#243562; --color-blue-700:#1e2447; }
+/* Customizable application palette; product material colours remain independent. */
+@theme { --color-teal-700:var(--brand-primary,#1e2447); --color-teal-600:#30395f; --color-teal-800:#161b36; --color-blue-500:#304580; --color-blue-600:#243562; --color-blue-700:var(--brand-primary,#1e2447); }
 
 /* The creation wizard has a light surface, independent of the editor theme. */
 .creation-screen { color-scheme: light; }
@@ -185,7 +185,7 @@ html.dark .creation-screen .storage-settings .option-help { color: #56627b !impo
 html.dark .creation-screen .storage-settings .choices button,
 html.dark .creation-screen .storage-settings .same { background: #fff !important; color: #1e2447 !important; border-color: #8997b8 !important; }
 html.dark .creation-screen .storage-settings .choices button.active,
-html.dark .creation-screen .storage-settings .same.active { background: #1e2447 !important; color: #fff !important; }
+html.dark .creation-screen .storage-settings .same.active { background:var(--brand-primary,#1e2447) !important; color: #fff !important; }
 
 .logo-window{direction:ltr}html[dir="rtl"] .creation-screen,html[dir="rtl"] .library-shell{text-align:right}html[dir="rtl"] .drawing{direction:ltr}html[dir="rtl"] .header-right{flex-wrap:wrap}
 

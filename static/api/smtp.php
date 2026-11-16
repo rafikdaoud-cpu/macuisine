@@ -22,8 +22,8 @@ try {
         if(!is_string($recipient)||strlen($recipient)>254||!filter_var($recipient,FILTER_VALIDATE_EMAIL))csm_json(400,['error'=>'Adresse de test invalide.']);
         $config=csm_smtp_config();
         if($config['host']==='')csm_json(400,['error'=>'Enregistrez d’abord le serveur SMTP.']);
-        $mail=csm_mailer($config);$mail->addAddress($recipient);$mail->Subject='Test SMTP — CSM Taksit';
-        $mail->Body="Votre configuration SMTP fonctionne : le serveur a accepté ce message de test.\n\nCSM Taksit\n0553 553 553\ncontact@csmtaksit.dz\nhttps://csmtaksit.dz";
+        $mail=csm_mailer($config);$mail->addAddress($recipient);require_once __DIR__.'/branding-service.php';$identity=csm_branding();$mail->Subject='Test SMTP — '.$identity['companyName'];
+        $mail->Body="Votre configuration SMTP fonctionne : le serveur a accepté ce message de test.\n\n".implode("\n",array_filter([$identity['companyName'],$identity['phone'],$identity['contactEmail'],$identity['website']]));
         try{$mail->send();}catch(Throwable $error){csm_json(422,['error'=>'Échec du test SMTP. Vérifiez le serveur, le port, le chiffrement, les identifiants et l’autorisation d’envoi de l’expéditeur.']);}
         csm_json(200,['sent'=>true]);
     }

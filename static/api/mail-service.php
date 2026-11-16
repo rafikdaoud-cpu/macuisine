@@ -31,7 +31,7 @@ function csm_write_json(string $path, array $data): void {
     if (!rename($temporary, $path)) { @unlink($temporary); throw new RuntimeException('Enregistrement privé impossible.'); }
 }
 function csm_smtp_config(): array {
-    $defaults = ['enabled'=>false,'host'=>'','port'=>587,'security'=>'tls','username'=>'','password'=>'','fromEmail'=>'contact@csmtaksit.dz','fromName'=>'CSM Taksit','publicUrl'=>'https://simulation.csmtaksit.dz'];
+    $defaults = ['enabled'=>false,'host'=>'','port'=>587,'security'=>'tls','username'=>'','password'=>'','fromEmail'=>'','fromName'=>'Mon entreprise','publicUrl'=>''];
     $path = csm_private_base() . '/smtp.json';
     if (!is_file($path)) return $defaults;
     $stored = json_decode((string)file_get_contents($path), true, 32, JSON_THROW_ON_ERROR);
@@ -76,7 +76,9 @@ function csm_mailer(array $config) {
     $mail->SMTPSecure = $config['security'] === 'none' ? '' : $config['security'];
     $mail->SMTPAutoTLS = $config['security'] !== 'none';
     $mail->setFrom($config['fromEmail'], $config['fromName']);
-    $mail->addReplyTo('contact@csmtaksit.dz', 'CSM Taksit');
+    require_once __DIR__.'/branding-service.php';
+    $identity=csm_branding();
+    $mail->addReplyTo($identity['contactEmail']!==''?$identity['contactEmail']:$config['fromEmail'], $identity['companyName']);
     return $mail;
 }
 function csm_design_record(string $id): ?array {
@@ -112,16 +114,22 @@ function csm_send_design_mail(array $row): array {
         $link = csm_project_link($row, $config);
         $mail = csm_mailer($config); $mail->addAddress($row['email'], $row['firstName'] . ' ' . $row['lastName']);
         require_once __DIR__.'/branding-service.php';
-        $companyName=csm_branding()['companyName'];
+        $identity=csm_branding();$companyName=$identity['companyName'];
         $mail->Subject = 'Merci pour votre projet — '.$companyName;
         $mail->MessageID = '<projet-' . $row['id'] . '@' . parse_url($config['publicUrl'], PHP_URL_HOST) . '>';
         $escape = static function ($text) { return htmlspecialchars((string)$text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); };
+        $contactHtml='<strong>'.$escape($companyName).'</strong>';
+        if($identity['phone']!=='')$contactHtml.='<br>Tél. : '.$escape($identity['phone']);
+        if($identity['contactEmail']!=='')$contactHtml.='<br><a href="mailto:'.$escape($identity['contactEmail']).'">'.$escape($identity['contactEmail']).'</a>';
+        if($identity['website']!=='')$contactHtml.='<br><a href="'.$escape($identity['website']).'">'.$escape($identity['website']).'</a>';
+        $contactText=implode("\n",array_filter([$companyName,$identity['phone'],$identity['contactEmail'],$identity['website']]));
         $detailsPath = $dir . '/equipements-et-dimensions.txt';
         if(is_file($detailsPath)&&filesize($detailsPath)>1024*1024)throw new RuntimeException('Récapitulatif trop volumineux pour le mail.');
         $details = is_file($detailsPath) ? (string)file_get_contents($detailsPath) : '';
         $mail->isHTML(true);
-        $mail->Body = '<!doctype html><html lang="fr"><body style="font-family:Arial,sans-serif;color:#1e2447;background:#f4f5f9;padding:24px"><div style="max-width:640px;margin:auto;background:#fff;padding:28px;border-radius:12px"><h1 style="font-size:24px">Merci pour votre confiance !</h1><p>Bonjour ' . $escape($row['firstName']) . ',</p><p>Nous avons bien reçu votre projet <strong>' . $escape($row['projectName']) . '</strong>. Merci d’avoir choisi ' . $escape($companyName) . ' pour votre aménagement sur mesure.</p><p>Notre équipe pourra vous contacter pour étudier votre conception, vérifier les dimensions et préparer votre devis.</p><p><a style="display:inline-block;background:#1e2447;color:#fff;padding:14px 20px;text-decoration:none;border-radius:6px" href="' . $escape($link) . '">Retrouver mon projet</a></p><p>Ce lien privé ouvre une copie de la version transmise, que vous pouvez modifier. Conservez-le et partagez-le uniquement avec les personnes de votre choix.</p><p>Votre PDF, votre plan DXF, votre aperçu PNG et le récapitulatif des éléments et dimensions sont joints à ce message.</p><h2 style="font-size:18px">Détail de votre projet</h2><pre style="white-space:pre-wrap;font-family:Arial,sans-serif;font-size:13px;line-height:1.5">' . $escape($details) . '</pre><hr><p><strong>' . $escape($companyName) . '</strong><br>Tél. : <a href="tel:+213553553553">0553 553 553</a><br><a href="mailto:contact@csmtaksit.dz">contact@csmtaksit.dz</a><br><a href="https://csmtaksit.dz">csmtaksit.dz</a></p><p style="font-size:12px;color:#56627b">Dessins indicatifs. La faisabilité, les dimensions et les finitions seront confirmées avec notre équipe avant fabrication.</p></div></body></html>';
-        $mail->AltBody = 'Bonjour ' . $row['firstName'] . ",\n\nMerci pour votre confiance ! Nous avons bien reçu votre projet « " . $row['projectName'] . " ».\nRetrouvez une copie de la version envoyée : " . $link . "\nCe lien est privé.\n\n" . $details . "\n\n" . $companyName . "\nTél. 0553 553 553\ncontact@csmtaksit.dz\nhttps://csmtaksit.dz\nDessins indicatifs, à valider avant fabrication.";
+        $mail->Body = '<!doctype html><html lang="fr"><body style="font-family:Arial,sans-serif;color:#1e2447;background:#f4f5f9;padding:24px"><div style="max-width:640px;margin:auto;background:#fff;padding:28px;border-radius:12px"><h1 style="font-size:24px">Merci pour votre confiance !</h1><p>Bonjour ' . $escape($row['firstName']) . ',</p><p>Nous avons bien reçu votre projet <strong>' . $escape($row['projectName']) . '</strong>. Merci d’avoir choisi ' . $escape($companyName) . ' pour votre aménagement sur mesure.</p><p>Notre équipe pourra vous contacter pour étudier votre conception, vérifier les dimensions et préparer votre devis.</p><p><a style="display:inline-block;background:#1e2447;color:#fff;padding:14px 20px;text-decoration:none;border-radius:6px" href="' . $escape($link) . '">Retrouver mon projet</a></p><p>Ce lien privé ouvre une copie de la version transmise, que vous pouvez modifier. Conservez-le et partagez-le uniquement avec les personnes de votre choix.</p><p>Votre PDF, votre plan DXF, votre aperçu PNG et le récapitulatif des éléments et dimensions sont joints à ce message.</p><h2 style="font-size:18px">Détail de votre projet</h2><pre style="white-space:pre-wrap;font-family:Arial,sans-serif;font-size:13px;line-height:1.5">' . $escape($details) . '</pre><hr><p>' . $contactHtml . '</p><p style="font-size:12px;color:#56627b">Dessins indicatifs. La faisabilité, les dimensions et les finitions seront confirmées avec notre équipe avant fabrication.</p></div></body></html>';
+        $mail->Body=str_replace('background:#1e2447','background:'.$identity['primaryColor'],$mail->Body);
+        $mail->AltBody = 'Bonjour ' . $row['firstName'] . ",\n\nMerci pour votre confiance ! Nous avons bien reçu votre projet « " . $row['projectName'] . " ».\nRetrouvez une copie de la version envoyée : " . $link . "\nCe lien est privé.\n\n" . $details . "\n\n" . $contactText . "\nDessins indicatifs, à valider avant fabrication.";
         $attachments = ['pdf'=>['plan-projet.pdf','application/pdf'],'cad'=>['plan-projet.dxf','application/dxf'],'png'=>['apercu-projet.png','image/png'],'equipment'=>['equipements-et-dimensions.txt','text/plain']];
         $size = 0;
         foreach ($attachments as $key => [$filename,$mime]) {

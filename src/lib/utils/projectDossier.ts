@@ -21,12 +21,15 @@ export function projectDetailLines(project:Project,language:Locale='fr',finishes
     floor.walls.forEach((wall,index)=>lines.push(`Mur ${index+1} : ${cm(Math.hypot(wall.end.x-wall.start.x,wall.end.y-wall.start.y))} cm`));
     lines.push('');
   }
-  lines.push(get(branding).companyName+' — 0553 553 553 — contact@csmtaksit.dz','https://csmtaksit.dz','Dessin indicatif. Dimensions et finitions à valider avant fabrication.');return lines;
+  const identity=get(branding);
+  lines.push([identity.companyName,identity.phone,identity.contactEmail].filter(Boolean).join(' — '));
+  if(identity.website)lines.push(identity.website);
+  lines.push('Dessin indicatif. Dimensions et finitions à valider avant fabrication.');return lines;
 }
 function wrapped(ctx:CanvasRenderingContext2D,lines:string[],width:number):string[]{
   return lines.flatMap(line=>{const result:string[]=[];let current='';for(const word of line.split(' ')){if(current&&ctx.measureText(current+' '+word).width>width){result.push(current);current=word;}else current+=(current?' ':'')+word;}result.push(current);return result;});
 }
-function context(width:number,height:number){const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Création du récapitulatif impossible.');ctx.direction='ltr';ctx.textAlign='left';ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.font='20px Arial, sans-serif';ctx.fillStyle='#1e2447';return{canvas,ctx};}
+function context(width:number,height:number){const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Création du récapitulatif impossible.');ctx.direction='ltr';ctx.textAlign='left';ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.font='20px Arial, sans-serif';ctx.fillStyle=get(branding).primaryColor;return{canvas,ctx};}
 export async function projectSheetPNG(project:Project,preview:Blob,language:Locale):Promise<Blob>{
   const url=URL.createObjectURL(preview),image=new Image();
   try{await new Promise<void>((resolve,reject)=>{image.onload=()=>resolve();image.onerror=()=>reject(new Error('Aperçu PNG illisible.'));image.src=url;});

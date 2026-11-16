@@ -4,7 +4,7 @@ import { locale, translateUi } from '../src/lib/i18n';
 import { creationAr, creationEn, creationFr } from '../src/lib/i18n/creationMessages';
 
 afterEach(() => { vi.unstubAllGlobals(); locale.set('fr'); });
-describe('CSM languages', () => {
+describe('Simulator languages', () => {
   it('provides matching nonempty configurator messages in all three languages', () => {
     for (const dictionary of [creationAr, creationEn]) {
       expect(Object.keys(dictionary).sort()).toEqual(Object.keys(creationFr).sort());

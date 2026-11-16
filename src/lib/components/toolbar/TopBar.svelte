@@ -363,7 +363,7 @@
   }
 </script>
 
-<div style="background:#1e2447" class="editor-topbar h-12 bg-gradient-to-r from-slate-800 to-slate-700 flex items-center px-4 gap-2 max-xl:px-2 max-xl:gap-1 shrink-0 shadow-sm">
+<div style="background:var(--brand-primary,#1e2447)" class="editor-topbar h-12 bg-gradient-to-r from-slate-800 to-slate-700 flex items-center px-4 gap-2 max-xl:px-2 max-xl:gap-1 shrink-0 shadow-sm">
   <!-- Back to Projects -->
   <a
     href={base || '/'}

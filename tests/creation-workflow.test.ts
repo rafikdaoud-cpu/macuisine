@@ -10,7 +10,7 @@ const setup = (): StorageSetup => ({
   columns: [{ type: 'hanging', count: 1, doors: false }, { type: 'shelves', count: 4, doors: true }, { type: 'drawers', count: 3, doors: false }],
 });
 
-describe('CSM sur mesure', () => {
+describe('Conception sur mesure', () => {
   it('keeps millimetres, independent columns, catalog references and saved geometry consistent', () => {
     const input = setup(), before = structuredClone(input), project = createCreationProject(input);
     const items = project.floors[0].furniture;
